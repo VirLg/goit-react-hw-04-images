@@ -5,7 +5,7 @@ import './App.css';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from 'components/Button/Button';
 import { AppDiv } from './App.styled';
-import { handleOnClick } from './components/Button/Button';
+
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 
 const BASE_URL = 'https://pixabay.com/api/';
@@ -20,26 +20,29 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [buttonVisible, setButtonVisible] = useState(false);
   //*useState
-  useEffect(
-    () => async () => {
+
+  useEffect(() => {
+    const fetcCard = async () => {
+      console.log(searchText);
       try {
-        setLoading(true);
         const data = await fetch(
           `${BASE_URL}/?key=${API_KEY}&q=${searchText}&per_page=12&page=${page}`
         );
         if (data.status !== 200) {
           return Promise.reject(new Error('Search is empty'));
         }
+
         const resp = await data.json();
         return await getFetch(resp);
       } catch (error) {
-        setError(error);
+        setError({ error });
       } finally {
-        setLoading(false);
+        setLoading({ loading: false });
       }
-    },
-    [page, searchText]
-  );
+    };
+    fetcCard();
+  }, [searchText, page]);
+
   // setButtonVisible(false);
   // async componentDidUpdate(prevProps, prevState) {
   //   const { searchText, page } = this.state;
@@ -48,30 +51,29 @@ const App = () => {
 
   //   }
   // }
-  const handleOnClick = () => {
-    console.log(1);
-  };
+
+  const handlePage = () => {};
 
   const heandleSearch = searchText => {
-    setSearchText(searchText);
-    setImages([]);
+    if (searchText) {
+      setSearchText(searchText);
+      setPage(5);
+    } else setImages([]);
   };
-  const getFetch = ({ hits, totalHits }) => {
+
+  const getFetch = resp => {
+    const { hits, totalHits } = resp;
+
+    setImages(hits);
+
     const hitsArr = hits.map(({ tags, largeImageURL, previewURL }) => {
       return { tags, largeImageURL, previewURL };
     });
 
+    //  else if (totalHits > 1) setButtonVisible(true);
+
     setImages(prevState => [...prevState, ...hitsArr]);
-
-    if (totalHits === 0) setImages([]);
-
-    if (totalHits > 1) setButtonVisible(true);
-  };
-
-  const handleLoadMore = onClick => {
-    console.log(onClick);
-    console.log(handleOnClick());
-    console.log(handleLoadMore);
+    console.log(images);
   };
 
   return (
@@ -80,7 +82,7 @@ const App = () => {
       {loading && <div>загружаем</div>}
       {error && <h1>{error.message}</h1>}
       <ImageGallery options={images} />
-      {buttonVisible && <Button page={handleLoadMore} />}
+      <Button page={handlePage} />
     </AppDiv>
   );
 };

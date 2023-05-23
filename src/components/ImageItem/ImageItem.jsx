@@ -16,8 +16,8 @@ const ImageItem = props => {
   };
 
   useEffect(() => {
-    if (images !== card) setImages(card);
-  });
+    setImages(card);
+  }, [card, images]);
 
   function handleActivCard(largeImageURL) {
     if (largeImageURL) {

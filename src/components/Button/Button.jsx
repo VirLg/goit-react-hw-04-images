@@ -26,9 +26,7 @@ import { ButtonCss } from './Button.styled';
 // }
 // }
 
-const Button = function (props) {
-  console.log(props);
-
+const Button = function () {
   return (
     <>
       <ButtonCss type="button" onClick={handleOnClick}>
@@ -37,6 +35,7 @@ const Button = function (props) {
     </>
   );
 };
+
 export const handleOnClick = onClick => {
   console.log(onClick);
   return onClick;
