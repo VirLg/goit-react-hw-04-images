@@ -5,47 +5,44 @@ import { ImageGalleryItem } from './ImageItem.styled';
 
 const ImageItem = props => {
   const { card } = props;
+
   // useState
   const [images, setImages] = useState(null);
-  const [activCard, setActivCard] = useState(null);
-  const [toggleSwitcher, setToggleSwitcher] = useState(false);
-  // useState
 
-  const toggleModal = () => {
-    setToggleSwitcher(!setToggleSwitcher);
-  };
+  const [largeImage, setLargeImage] = useState('');
+  const [modalWin, setModalWin] = useState('');
+  // useState
 
   useEffect(() => {
     setImages(card);
   }, [card, images]);
 
-  function handleActivCard(largeImageURL) {
-    if (largeImageURL) {
-      setActivCard(largeImageURL);
+  const activCardIdx = index => {
+    setLargeImage(images[index].largeImageURL);
+  };
 
-      toggleModal();
-    }
-
-    console.log(largeImageURL);
-    return largeImageURL;
-  }
+  const handleClose = close => {
+    if (close) setLargeImage('');
+    setModalWin(close);
+    console.log(close);
+  };
 
   return (
     <>
       {images &&
-        images.map(({ id, previewURL, tags, largeImageURL }, idx) => (
-          <ImageGalleryItem className="gallery__item" key={idx}>
+        images.map(({ id, previewURL, tags, largeImageURL }, index) => (
+          <ImageGalleryItem className="gallery__item" key={index}>
             <img
               src={previewURL}
               alt={tags}
-              onClick={() => handleActivCard(largeImageURL)}
+              onClick={() => activCardIdx(index)}
             />
           </ImageGalleryItem>
         ))}
 
-      {toggleSwitcher && (
-        <ModalWindow>
-          <img src={activCard} alt="" />
+      {largeImage && (
+        <ModalWindow win={handleClose}>
+          <img src={largeImage} alt="" props={largeImage} />
         </ModalWindow>
       )}
     </>

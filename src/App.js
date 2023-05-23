@@ -23,7 +23,6 @@ const App = () => {
 
   useEffect(() => {
     const fetcCard = async () => {
-      console.log(searchText);
       try {
         const data = await fetch(
           `${BASE_URL}/?key=${API_KEY}&q=${searchText}&per_page=12&page=${page}`

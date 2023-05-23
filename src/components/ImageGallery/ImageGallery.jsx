@@ -4,15 +4,11 @@ import ImageItem from '../ImageItem/ImageItem';
 import { ImageGalleryCss } from './ImageGallery.styled';
 
 const ImageGallery = function (props) {
-  if (props.options !== []) {
-    const { options } = props;
-
-    return (
-      <ImageGalleryCss className="gallery">
-        <ImageItem card={options} />
-      </ImageGalleryCss>
-    );
-  }
+  return (
+    <ImageGalleryCss className="gallery">
+      {props.options !== [] && <ImageItem card={props.options} />}
+    </ImageGalleryCss>
+  );
 };
 
 export default ImageGallery;
