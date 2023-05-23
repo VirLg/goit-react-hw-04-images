@@ -17,7 +17,7 @@ const App = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [buttonVisible, setButtonVisible] = useState(false);
   //*useState
 
@@ -43,37 +43,30 @@ const App = () => {
     fetcCard();
   }, [searchText, page]);
 
-  // setButtonVisible(false);
-  // async componentDidUpdate(prevProps, prevState) {
-  //   const { searchText, page } = this.state;
-
-  //   if (prevState.searchText !== searchText || prevState.page !== page) {
-
-  //   }
-  // }
-
-  const handlePage = () => {};
-
   const heandleSearch = searchText => {
-    if (searchText) {
-      setSearchText(searchText);
-      setPage(5);
-    } else setImages([]);
+    if (searchText) setSearchText(searchText);
+    handlePageCounter();
   };
 
   const getFetch = resp => {
     const { hits, totalHits } = resp;
 
-    setImages(hits);
+    if (totalHits > 1) {
+      const hitsArr = hits.map(({ tags, largeImageURL, previewURL }) => {
+        return {
+          tags,
+          largeImageURL,
+          previewURL,
+        };
+      });
+      return setImages(prevState => [...prevState, ...hitsArr]);
+    } else if (totalHits < 1) {
+      setImages([]);
+    }
+  };
 
-    const hitsArr = hits.map(({ tags, largeImageURL, previewURL }) => {
-      return { tags, largeImageURL, previewURL };
-    });
-
-    //  else if (totalHits > 1) setButtonVisible(true);
-
-    setImages(prevState => [...prevState, ...hitsArr]);
-    console.log(images);
+  const handlePageCounter = () => {
+    setPage(1);
   };
 
   return (
@@ -82,7 +75,7 @@ const App = () => {
       {loading && <div>загружаем</div>}
       {error && <h1>{error.message}</h1>}
       <ImageGallery options={images} />
-      <Button page={handlePage} />
+      <Button page={handlePageCounter} />
     </AppDiv>
   );
 };
