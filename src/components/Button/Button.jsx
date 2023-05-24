@@ -1,4 +1,4 @@
-// import { Component } from "react"
+import { useState } from 'react';
 import { ButtonCss } from './Button.styled';
 // class Button extends Component{
 // state={
@@ -26,18 +26,17 @@ import { ButtonCss } from './Button.styled';
 // }
 // }
 
-const Button = function () {
+const Button = function (props) {
+  // const hadleLoadMore = () => {
+  //   console.log();
+  // };
   return (
     <>
-      <ButtonCss type="button" onClick={handleOnClick}>
+      <ButtonCss type="button" onClick={props.page}>
         Load More
       </ButtonCss>
     </>
   );
 };
 
-export const handleOnClick = onClick => {
-  console.log(onClick);
-  return onClick;
-};
 export default Button;

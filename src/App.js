@@ -44,7 +44,7 @@ const App = () => {
 
   const heandleSearch = searchText => {
     if (searchText) setSearchText(searchText);
-    handlePageCounter();
+    // handlePageCounter();
   };
 
   const getFetch = resp => {
@@ -64,8 +64,13 @@ const App = () => {
     }
   };
 
-  const handlePageCounter = () => {
-    setPage(1);
+  // const handlePageCounter = () => {
+  //   setPage(1);
+  // };
+
+  const loadMore = page => {
+    setPage(prevState => prevState + 1);
+    console.log(page);
   };
 
   return (
@@ -74,7 +79,7 @@ const App = () => {
       {loading && <div>загружаем</div>}
       {error && <h1>{error.message}</h1>}
       <ImageGallery options={images} />
-      <Button page={handlePageCounter} />
+      <Button page={loadMore} />
     </AppDiv>
   );
 };
