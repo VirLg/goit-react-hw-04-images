@@ -22,7 +22,8 @@ const App = () => {
   //*useState
 
   useEffect(() => {
-    const fetcCard = async () => {
+    const fetchCard = async () => {
+      console.log(searchText);
       try {
         const data = await fetch(
           `${BASE_URL}/?key=${API_KEY}&q=${searchText}&per_page=12&page=${page}`
@@ -39,13 +40,24 @@ const App = () => {
         setLoading({ loading: false });
       }
     };
-    fetcCard();
+    fetchCard();
   }, [searchText, page]);
 
-  const heandleSearch = searchText => {
-    if (searchText) setSearchText(searchText);
-    // handlePageCounter();
+  const heandleSearch = search => {
+    if (search !== '') {
+      setPage(1);
+      setSearchText(search);
+      setButtonVisible(true);
+    } else setButtonVisible(false);
   };
+
+  const handleSearch = value => {
+    if (value) setButtonVisible(false);
+  };
+
+  useEffect(() => {
+    handleSearch();
+  });
 
   const getFetch = resp => {
     const { hits, totalHits } = resp;
@@ -64,22 +76,17 @@ const App = () => {
     }
   };
 
-  // const handlePageCounter = () => {
-  //   setPage(1);
-  // };
-
   const loadMore = page => {
     setPage(prevState => prevState + 1);
-    console.log(page);
   };
 
   return (
     <AppDiv className="App">
-      <SearchBar onSubmit={heandleSearch} />
+      <SearchBar onSubmit={heandleSearch} onSearch={handleSearch} />
       {loading && <div>загружаем</div>}
       {error && <h1>{error.message}</h1>}
       <ImageGallery options={images} />
-      <Button page={loadMore} />
+      {buttonVisible && <Button page={loadMore} />}
     </AppDiv>
   );
 };
