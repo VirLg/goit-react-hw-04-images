@@ -23,6 +23,7 @@ const ImageItem = props => {
 
   const handleClose = close => {
     if (close) setLargeImage('');
+    console.log(modalWin);
     setModalWin(close);
   };
 
