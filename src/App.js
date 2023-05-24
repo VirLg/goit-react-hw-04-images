@@ -35,6 +35,10 @@ const App = () => {
           }
           setLoading(true);
           const resp = await data.json();
+          console.log(resp);
+          if (resp.hits.length < 12) {
+            setButtonVisible(false);
+          }
           return await getFetch(resp);
         } catch (error) {
           setError({ error });
@@ -82,7 +86,7 @@ const App = () => {
       });
 
       return setImages(prevState => [...prevState, ...hitsArr]);
-    } else if (totalHits < 1 && hits.length < 12) {
+    } else if (totalHits < 1) {
       setImages([]);
       Notify.failure('Sorry, this search not valide.');
       setButtonVisible(false);
