@@ -8,6 +8,7 @@ const ModalWindow = props => {
   useEffect(() => {
     document.addEventListener('keydown', handlePressEscape);
     // setClose(false);
+    return document.removeEventListener('keydown', handlePressEscape);
   }, [close]);
   useEffect(() => {
     props.win(close);
