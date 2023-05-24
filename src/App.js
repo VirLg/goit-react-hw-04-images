@@ -1,11 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
-
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from 'components/Button/Button';
 import { AppDiv } from './App.styled';
-
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 
 const BASE_URL = 'https://pixabay.com/api/';
@@ -82,6 +81,8 @@ const App = () => {
       return setImages(prevState => [...prevState, ...hitsArr]);
     } else if (totalHits < 1) {
       setImages([]);
+      Notify.failure('Sorry, this contact already in your list.');
+      setButtonVisible(false);
     }
   };
 
