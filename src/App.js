@@ -19,6 +19,8 @@ const App = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [buttonVisible, setButtonVisible] = useState(false);
+  const [visibleCard, setVisibleCard] = useState(false);
+
   //*useState
 
   useEffect(() => {
@@ -31,13 +33,13 @@ const App = () => {
         if (data.status !== 200) {
           return Promise.reject(new Error('Search is empty'));
         }
-
+        setLoading(true);
         const resp = await data.json();
         return await getFetch(resp);
       } catch (error) {
         setError({ error });
       } finally {
-        setLoading({ loading: false });
+        setLoading(false);
       }
     };
     fetchCard();
@@ -48,11 +50,18 @@ const App = () => {
       setPage(1);
       setSearchText(search);
       setButtonVisible(true);
+      setVisibleCard(true);
+      setLoading(false);
     } else setButtonVisible(false);
   };
 
   const handleSearch = value => {
-    if (value) setButtonVisible(false);
+    if (value) {
+      setButtonVisible(false);
+      setVisibleCard(false);
+      setLoading(true);
+      setImages([]);
+    }
   };
 
   useEffect(() => {
@@ -85,7 +94,7 @@ const App = () => {
       <SearchBar onSubmit={heandleSearch} onSearch={handleSearch} />
       {loading && <div>загружаем</div>}
       {error && <h1>{error.message}</h1>}
-      <ImageGallery options={images} />
+      {visibleCard && <ImageGallery options={images} />}
       {buttonVisible && <Button page={loadMore} />}
     </AppDiv>
   );
