@@ -81,7 +81,7 @@ const App = () => {
       return setImages(prevState => [...prevState, ...hitsArr]);
     } else if (totalHits < 1) {
       setImages([]);
-      Notify.failure('Sorry, this contact already in your list.');
+      Notify.failure('Sorry, this search not valide.');
       setButtonVisible(false);
     }
   };
