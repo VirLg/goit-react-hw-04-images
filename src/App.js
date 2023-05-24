@@ -78,8 +78,9 @@ const App = () => {
           previewURL,
         };
       });
+
       return setImages(prevState => [...prevState, ...hitsArr]);
-    } else if (totalHits < 1) {
+    } else if (totalHits < 1 && hits.length < 12) {
       setImages([]);
       Notify.failure('Sorry, this search not valide.');
       setButtonVisible(false);
