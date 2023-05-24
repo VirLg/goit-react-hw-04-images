@@ -24,21 +24,23 @@ const App = () => {
 
   useEffect(() => {
     const fetchCard = async () => {
-      console.log(searchText);
-      try {
-        const data = await fetch(
-          `${BASE_URL}/?key=${API_KEY}&q=${searchText}&per_page=12&page=${page}`
-        );
-        if (data.status !== 200) {
-          return Promise.reject(new Error('Search is empty'));
+      if (searchText) {
+        console.log(searchText);
+        try {
+          const data = await fetch(
+            `${BASE_URL}/?key=${API_KEY}&q=${searchText}&per_page=12&page=${page}`
+          );
+          if (data.status !== 200) {
+            return Promise.reject(new Error('Search is empty'));
+          }
+          setLoading(true);
+          const resp = await data.json();
+          return await getFetch(resp);
+        } catch (error) {
+          setError({ error });
+        } finally {
+          setLoading(false);
         }
-        setLoading(true);
-        const resp = await data.json();
-        return await getFetch(resp);
-      } catch (error) {
-        setError({ error });
-      } finally {
-        setLoading(false);
       }
     };
     fetchCard();
