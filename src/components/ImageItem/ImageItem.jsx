@@ -18,7 +18,7 @@ const ImageItem = props => {
   }, [card, images]);
 
   const activCardIdx = index => {
-    setLargeImage(images[index].largeImageURL, images[index].tags);
+    setLargeImage([images[index].largeImageURL, images[index].tags]);
   };
 
   const handleClose = close => {
@@ -42,7 +42,7 @@ const ImageItem = props => {
 
       {largeImage && (
         <ModalWindow win={handleClose}>
-          <img src={largeImage} alt="" props={largeImage} />
+          <img src={largeImage[0]} alt={largeImage[1]} props={largeImage} />
         </ModalWindow>
       )}
     </>
