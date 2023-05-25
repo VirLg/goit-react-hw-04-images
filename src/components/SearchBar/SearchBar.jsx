@@ -9,14 +9,13 @@ import {
 
 //Hook
 const SearchBar = props => {
-  const { onSubmit, onSearch } = props;
+  const { onSubmit } = props;
 
   const [value, setValue] = useState('');
 
   const heandleChange = ({ target }) => {
     const { value } = target;
     setValue(value);
-    return onSearch(value);
   };
 
   const handleSubmit = evt => {

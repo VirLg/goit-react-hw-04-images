@@ -18,7 +18,7 @@ const ImageItem = props => {
   }, [card, images]);
 
   const activCardIdx = index => {
-    setLargeImage(images[index].largeImageURL);
+    setLargeImage(images[index].largeImageURL, images[index].tags);
   };
 
   const handleClose = close => {

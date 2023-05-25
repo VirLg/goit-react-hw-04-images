@@ -1,40 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { ModalBackdrop, ModalItem } from './ModalWindow.styled';
 // *Hook
 
 const ModalWindow = props => {
-  const [close, setClose] = useState(false);
   useEffect(() => {
-    document.addEventListener('keydown', handlePressEscape);
-    // setClose(false);
-    return document.removeEventListener('keydown', handlePressEscape);
-  }, [close]);
-  useEffect(() => {
-    props.win(close);
-  });
+    const handlePressEscape = e => {
+      if (e.code === 'Escape') {
+        props.win(true);
 
-  const handlePressEscape = e => {
-    if (e.code === 'Escape') {
-      setClose(true);
-      console.log('press');
-    }
-  };
+        console.log('press');
+      }
+    };
+    document.addEventListener('keydown', handlePressEscape);
+    return document.removeEventListener('keydown', handlePressEscape);
+  }, [props]);
+
   const handleClick = e => {
     console.log(e);
     if (e.target === e.currentTarget) {
-      setClose(true);
+      props.win(true);
     }
   };
   return (
     <>
-      (
       <ModalBackdrop className="Modal__Backdrop" onClick={handleClick}>
         <ModalItem className="Modal__Item">
           <div>{props.children}</div>
         </ModalItem>
       </ModalBackdrop>
-      )
     </>
   );
 };

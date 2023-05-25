@@ -18,14 +18,12 @@ const App = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [buttonVisible, setButtonVisible] = useState(false);
-  const [visibleCard, setVisibleCard] = useState(false);
 
   //*useState
 
   useEffect(() => {
     const fetchCard = async () => {
       if (searchText) {
-        console.log(searchText);
         try {
           const data = await fetch(
             `${BASE_URL}/?key=${API_KEY}&q=${searchText}&per_page=12&page=${page}`
@@ -51,32 +49,19 @@ const App = () => {
   }, [searchText, page]);
 
   const heandleSearch = search => {
-    if (search !== '') {
+    if (search !== '' && search !== searchText) {
       setPage(1);
       setSearchText(search);
       setButtonVisible(true);
-      setVisibleCard(true);
+      setImages([]);
       setLoading(false);
     } else setButtonVisible(false);
   };
 
-  const handleSearch = value => {
-    if (value) {
-      setButtonVisible(false);
-      setVisibleCard(false);
-      setLoading(true);
-      setImages([]);
-    }
-  };
-
-  useEffect(() => {
-    handleSearch();
-  });
-
   const getFetch = resp => {
     const { hits, totalHits } = resp;
 
-    if (totalHits > 1) {
+    if (totalHits > 0) {
       const hitsArr = hits.map(({ tags, largeImageURL, previewURL }) => {
         return {
           tags,
@@ -93,17 +78,19 @@ const App = () => {
     }
   };
 
-  const loadMore = page => {
-    setPage(prevState => prevState + 1);
-  };
-
   return (
     <AppDiv className="App">
-      <SearchBar onSubmit={heandleSearch} onSearch={handleSearch} />
+      <SearchBar onSubmit={heandleSearch} />
       {loading && <div>загружаем</div>}
       {error && <h1>{error.message}</h1>}
-      {visibleCard && <ImageGallery options={images} />}
-      {buttonVisible && <Button page={loadMore} />}
+      <ImageGallery options={images} />
+      {buttonVisible && (
+        <Button
+          page={() => {
+            setPage(prevState => prevState + 1);
+          }}
+        />
+      )}
     </AppDiv>
   );
 };
